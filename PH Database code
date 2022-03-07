@@ -1,0 +1,654 @@
+-- CREATING TABLES FOR THE POWERHOUSE DATABASE SYSTEM  
+
+CREATE TABLE client (
+     client_id INT PRIMARY KEY,
+     first_name VARCHAR (15),
+     last_name VARCHAR (15),
+     date_birth DATE,
+     client_age INT,
+     address VARCHAR(30),
+     phone_number INT,
+     region VARCHAR(20),
+     postcode VARCHAR (10),
+     city VARCHAR (20),
+     CHECK(client_age> 21)
+)
+
+DESC client;
+
+
+--CLIENT TYPE TABLE 
+CREATE TABLE client_type(
+    client_type_id INT PRIMARY KEY,
+    client_id INT,
+    costumer_setting VARCHAR(50),
+    FOREIGN KEY (client_id) REFERENCES client (client_id) ON DELETE SET NULL
+)
+DESC client_type;
+
+--THE SERVICES THE COMPANY PERFOMED TABLE
+CREATE TABLE service(
+    service_id INT PRIMARY KEY,
+    service_selection VARCHAR (100),
+    comment_given VARCHAR (500),
+    client_id INT,
+    employee_id INT,
+    service_cost_id INT,
+    FOREIGN KEY (client_id) REFERENCES client(client_id) ON DELETE SET NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id) ON DELETE SET NULL,
+    FOREIGN KEY (service_cost_id) REFERENCES service_cost (service_cost_id) ON DELETE SET NULL
+)
+
+
+DESC service;
+
+--SERVICE COST TABLE 
+CREATE TABLE service_cost(
+    service_cost_id INT PRIMARY KEY,
+    service_name VARCHAR (50),
+    hourly_cost INT,
+    package_cost INT 
+)
+
+DESC service_cost;
+
+--EMPLOYEE TABLE
+CREATE TABLE employee(
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(15),
+    last_name VARCHAR (15),
+    employee_address VARCHAR (50),
+    employee_branch VARCHAR (50),
+    employee_birthdate DATE,
+    employee_age INT,
+    employee_postcode VARCHAR (10),
+    employee_city VARCHAR (15),
+    employee_department VARCHAR (15),
+    employee_position VARCHAR (50),
+    CHECK (employee_age> 21)
+)
+DESC employee;
+-- RESEARCH PROJECT TABLE
+CREATE TABLE research_project(
+    research_project_id INT PRIMARY KEY,
+    project_name VARCHAR(100),
+    project_description VARCHAR(500),
+    project_location VARCHAR(30),
+    project_date DATE,
+    project_agency VARCHAR (50),
+    project_university VARCHAR (50)
+)
+
+DESC research_project;
+--CLIENT INVOICE TABLE
+CREATE TABLE client_invoice(
+    invoice_id INT PRIMARY KEY,
+    invoice_number INT,
+    invoice_date DATE,
+    client_id INT,
+    FOREIGN KEY (client_id) REFERENCES client(client_id) ON DELETE SET NULL
+)
+DESC client_invoice;
+
+
+CREATE TABLE vehicle(
+    vehicle_id INT PRIMARY KEY,
+    plate_number VARCHAR (10),
+    vehicle_model VARCHAR (40),
+    vehicle_make VARCHAR (40)
+)
+DESC vehicle;
+-- VEHICLE CONTRACT
+CREATE TABLE vehicle_contract(
+    vehicle_contract_id INT PRIMARY KEY,
+    vehicle_id INT,
+    contract_type VARCHAR (10),
+    FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id) ON DELETE SET NULL
+)
+
+DESC vehicle_contract;
+
+CREATE TABLE energy_surplus(
+energy_surplus_id INT PRIMARY KEY,
+energy_amount INT,
+energy_price_id INT,
+invoice_id INT,
+FOREIGN KEY (invoice_id) REFERENCES client_invoice(invoice_id) ON DELETE SET NULL,
+FOREIGN KEY (energy_price_id) REFERENCES energy_price(energy_price_id) ON DELETE SET NULL 
+)
+
+DESC energy_surplus;
+
+CREATE TABLE energy_price(
+    energy_price_id INT PRIMARY KEY,
+    energy_per_kwh VARCHAR (15),
+    retail_price VARCHAR (15),
+    export_price VARCHAR (15)
+)
+
+
+DESC energy_price;
+
+
+CREATE TABLE employee_position (
+    employee_position_id INT PRIMARY KEY,
+    employee_id INT,
+    salary_id INT,
+    role VARCHAR (30),
+    employee_contract VARCHAR (20),
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id) ON DELETE SET NULL,
+    FOREIGN KEY (salary_id) REFERENCES employee_salary(salary_id) ON DELETE SET NULL
+  
+)
+DESC employee_position;
+
+CREATE TABLE employee_salary(
+    salary_id INT PRIMARY KEY,
+    salary_for_position VARCHAR (30),
+    salary_annually INT
+)
+DESC employee_salary;
+
+
+CREATE TABLE supplier(
+    supplier_id INT PRIMARY KEY,
+    supplier_name VARCHAR(30),
+    supplier_phone INT,
+    supplier_mail VARCHAR (20),
+    supplier_address VARCHAR (20),
+    supplier_postcode VARCHAR (10),
+    supplier_region VARCHAR (15),
+    supplier_city VARCHAR (15),
+    supplier_country VARCHAR (15)
+)
+DESC supplier;
+CREATE TABLE warehouse(
+    warehouse_id INT PRIMARY KEY,
+    warehouse_name VARCHAR(30),
+    warehouse_address VARCHAR(30),
+    warehouse_postcode VARCHAR(10),
+    warehouse_city VARCHAR(20),
+    warehouse_country VARCHAR(20)
+)
+DESC warehouse;
+
+
+CREATE TABLE manufactory(
+    manufactory_id INT PRIMARY KEY,
+    product_type VARCHAR (20),
+    serial_number INT,
+    product_price_id INT,
+    product_make VARCHAR (15),
+    product_model VARCHAR (15),
+    FOREIGN KEY (product_price_id) REFERENCES product_price(product_price_id) ON DELETE SET NULL
+)
+DESC manufactory;
+
+CREATE TABLE product_price(
+    product_price_id INT PRIMARY KEY,
+    product_name VARCHAR (30),
+    product_retail_price INT
+)
+DESC product_price;
+
+
+
+
+
+-- INSERTING DATA INTO CLIENT TABLE
+INSERT INTO client VALUES(20, 'john', 'snow', '1994-08-01', 27, '12 longwell green',0121345879, 'west midlands','W450LM', 'COVENTRY')
+INSERT INTO client VALUES(21, 'alex', 'grey', '1999-09-01', 29, '15 longwell station',0121340979, 'west london','L450LM', 'LONDON')
+INSERT INTO client VALUES(22, 'mac', 'green', '1990-08-20', 30, '12  sandwell road',0121348779, 'wales','W990LM', 'Cardiff')
+INSERT INTO client VALUES(23, 'dee', 'chelsea', '1989-06-01', 28, '12 polar road',0121345999, 'somerset','B450LM', 'BATH')
+INSERT INTO client VALUES(24, 'charlie', 'puth', '1996-10-11', 26, '15 hillside',0121345809, 'west LONDON','L950LM', 'LONDON')
+INSERT INTO client VALUES(25, 'dennis', 'robin', '1967-08-19', 28, '20 west road',0121345856, 'NORTH midlands','N850LM', 'BIRMINGHAM')
+INSERT INTO client VALUES(26, 'ahmed', 'ali', '1974-07-01', 24, '33 sansbury road',0121675879, 'west yorkshire','Y650LM', 'YORKSHIRE')
+INSERT INTO client VALUES(27, 'alice', 'cortez', '1950-08-01', 50, '99 snowhill',0121345865, 'AVON','S750LM', 'NEWPORT')
+INSERT INTO client VALUES(28, 'jennifer', 'holmes', '1984-03-01', 44, '14 hearts hill',0121388879, 'east london', 'E9450LM', 'LONDON')
+INSERT INTO client VALUES(29, 'john', 'seth', '1988-02-01', 33, '17 west coast',0121346679, 'east midlands','E450LM', 'WOLVERHAMPTOM')
+SELECT * FROM client;
+
+--INSERTING DATA INTO CLIENT TYPE TABLE
+INSERT INTO client_type VALUES(30, 20, 'Private Home')
+INSERT INTO client_type VALUES(31, 21, 'Crime Scene Site')
+INSERT INTO client_type VALUES(32, 22, 'Farm')
+INSERT INTO client_type VALUES(33, 23, 'Tech Bussiness office')
+INSERT INTO client_type VALUES(34, 24, 'Private Home')
+INSERT INTO client_type VALUES(35, 25, 'Contruction site')
+INSERT INTO client_type VALUES(36, 26, 'Private Home')
+INSERT INTO client_type VALUES(37, 27, 'Retail Bussines Office')
+INSERT INTO client_type VALUES(38, 28, 'Contruction Site')
+INSERT INTO client_type VALUES(39, 29, 'Private Home')
+SELECT * FROM client_type;
+
+--INSERTING DATA INTO EMPLOYEE TABLE 
+INSERT INTO employee VALUES(40, 'Ali', 'Aron', '34 villa street', "New hall", '1993-04-30', 30, 'B560RZ', 'Newcastle', 'HR', 'Cosultant')
+INSERT INTO employee VALUES(41, 'Alice', 'green', '34 walwayn rd', "south end", '1993-08-09', 31, 'B780RZ', 'LONDON', 'HR', 'ADVISER')
+INSERT INTO employee VALUES(42, 'Alex', 'bold', '3 linch rd', "Newtown", '1987-04-30', 35, 'B990RZ', 'CARDIFF', 'PRODUCTION', 'PRODUCER')
+INSERT INTO employee VALUES(43, 'Alicia', 'Amen', '6 aston road', "eastgate", '1973-04-21', 50, 'B900RZ', 'NewYORK', 'HR', 'Cosultant')
+INSERT INTO employee VALUES(44, 'Arbuary', 'turner', '88 claremont street', "warwick", '1988-09-30', 60, 'B090RZ', 'New JERSEY', 'MARKETING', 'M MANAGER')
+INSERT INTO employee VALUES(45, 'Akash', 'kasher', '5 stamford rd', "solihull", '1950-04-30', 78, 'B598RZ', 'NORTHAMPTOM', 'FINANCE', 'ADVISOR')
+INSERT INTO employee VALUES(46, 'jonathen', 'Antonia', '3 hounslow lane', "New hall", '1973-09-30', 44, 'B590RZ', 'MANCHESTER', 'ACCOUNTING', 'ACCOUNTENT')
+INSERT INTO employee VALUES(47, 'Ahmed', 'khan', '9 shore street', "New hall", '1966-04-30', 39, 'L560RZ', 'DUBAI', 'CS', 'CALL HANDLER')
+INSERT INTO employee VALUES(48, 'mohamed', 'kaloulia', '6 stratford road', "hallow", '1999-04-30', 40, 'G560RZ', 'WASHINGTON', 'TECHNOLOGY', 'DEVELOPER')
+INSERT INTO employee VALUES(49, 'seth', 'benjemin', '66 high st', "New hall", '1993-10-30', 50, 'P560RZ', 'MELBOURNE', 'HR', 'Cosultant')
+SELECT * FROM employee;
+
+-- INSERTING DATA INTO SERVICE COST TABLE
+INSERT INTO service_cost VALUES(11, 'Solar installation', 10, 250)
+INSERT INTO service_cost VALUES(12, 'ligt fittings', 13, 350)
+INSERT INTO service_cost VALUES(13, 'Solar installation', 10, 250)
+INSERT INTO service_cost VALUES(14, 'Wire installation', 15, 450)
+INSERT INTO service_cost VALUES(15, 'Solar installation', 10, 250)
+INSERT INTO service_cost VALUES(16, 'metre testing',20, 650)
+INSERT INTO service_cost VALUES(17, 'fault findings', 100, 850)
+INSERT INTO service_cost VALUES(18, 'home lighting', 55, 2500)
+INSERT INTO service_cost VALUES(19, 'Fire alarms', 100, 3350)
+INSERT INTO service_cost VALUES(10, 'Solar installation', 10, 250)
+SELECT * FROM service_cost;
+
+--INSERTING VALUES INTO SERVICE 
+INSERT INTO service VALUES(50,'METRE TESTING', 'THIS SERVICE HAS BEEN COMPLETED', 20, 40, 10)
+INSERT INTO service VALUES(51,'FAULT FINDINGS', 'THIS SERVICE IS ONGOING', 21, 41, 11)
+INSERT INTO service VALUES(52,'WIRE INSTALLATION', 'THIS SERVICE HAS BEEN COMPLETED', 22, 42, 12)
+INSERT INTO service VALUES(53,'METRE TESTING', 'THIS SERVICE HAS BEEN COMPLETED', 23, 43, 13)
+INSERT INTO service VALUES(54,'FIRE ALARMS', 'THIS SERVICE HAS BEEN PAUSED DUE TO CLIENT REQUEST', 24, 44, 14)
+INSERT INTO service VALUES(55,'METRE TESTING', 'THIS SERVICE HAS BEEN COMPLETED', 25, 45, 15)
+INSERT INTO service VALUES(56,'HOME LIGTINING', 'THIS SERVICE IS ONGOING', 26, 46, 16)
+INSERT INTO service VALUES(57,'METRE TESTING', 'THIS SERVICE HAS BEEN COMPLETED', 27, 47, 17)
+INSERT INTO service VALUES(58,'LIGHT FITTING', 'THIS SERVICE IS ONGOING', 28, 48, 18)
+INSERT INTO service VALUES(59,'METRE TESTING', 'THIS SERVICE HAS BEEN COMPLETED', 29, 49, 19)
+SELECT *FROM service;
+
+--INSERTING DATA INTO THE RESEARCH PROJECT TABLE
+INSERT INTO research_project VALUES(60, 'BENEFITS OF GREEN', 'THIS RESERCH PROJECT IS BASED ON THE BENEFITS OF GREEN SOLUTIONS TO THE ENVIROMENT', 'LONDON','2020-09-08', 'GREEN SOLUTION AGENCY', 'UCL')
+INSERT INTO research_project VALUES(61, 'THE FACTORS EFFECTING THE ENVIROMENT', 'THIS RESERCH PROJECT IS BASED ON THE FACTORS EFFECTING THE ENVIROMENT', 'LONDON','2021-09-08', 'GREEN SOLUTION AGENCY', 'QUEENS MARY UNIVERSITY')
+INSERT INTO research_project VALUES(62, 'PROMOTING GREEN SOLUTION', 'THIS RESERCH PROJECT IS BASED ON PROMOTING GREEN SOLUTIONS TO COMMUNITIES', 'LONDON','2019-09-08', 'GREEN SOLUTION AGENCY', 'UCL')
+INSERT INTO research_project VALUES(63, 'BENEFITS OF GREEN', 'THIS RESERCH PROJECT IS BASED ON THE BENEFITS OF GREEN SOLUTIONS TO THE ENVIROMENT', 'LONDON','2018-09-08', 'GREEN SOLUTION AGENCY', 'BRUNEL UNIVERSITY')
+INSERT INTO research_project VALUES(64, 'RESEARCHING GREEN SOLUTIONS', 'THIS RESERCH PROJECT IS BASED ON THE BENEFITS OF GREEN SOLUTIONS TO THE ENVIROMENT', 'LONDON','2017-09-08', 'GREEN SOLUTION AGENCY', 'NCH')
+INSERT INTO research_project VALUES(65, 'BENEFITS OF GREEN', 'THIS RESERCH PROJECT IS BASED ON THE BENEFITS OF GREEN SOLUTIONS TO THE ENVIROMENT', 'COVENTRY','2016-09-08', 'GREEN SOLUTION AGENCY', 'COVENTRY UNIVERSITY')
+INSERT INTO research_project VALUES(66, 'CAN WE ALL GO GREEN', 'THIS RESERCH PROJECT IS BASED ON GREEN SOLUTIONS AND THE ROLE OF SOCIETY', 'LONDON','2015-09-08', 'GREEN SOLUTION AGENCY', 'UCL')
+INSERT INTO research_project VALUES(67, 'BENEFITS OF GREEN', 'THIS RESERCH PROJECT IS BASED ON THE BENEFITS OF GREEN SOLUTIONS TO THE ENVIROMENT', 'BRISTOL','2014-09-08', 'GREEN SOLUTION AGENCY', 'UWE')
+INSERT INTO research_project VALUES(68, 'GREEN SOLUTION AND THE COMPANIES THAT PLAY A ROLE', 'THIS RESERCH PROJECT IS BASED ON THE BENEFITS OF GREEN SOLUTIONS TO THE ENVIROMENT AND THE COMPANIES THAT ARE PARTICIPATING', 'CARDIFF','2013-09-08', 'GREEN SOLUTION AGENCY', 'CARDIFF UNIVERSITY')
+INSERT INTO research_project VALUES(69, 'BENEFITS OF GREEN', 'THIS RESERCH PROJECT IS BASED ON THE BENEFITS OF GREEN SOLUTIONS TO THE ENVIROMENT', 'LONDON','2012-09-08', 'GREEN SOLUTION AGENCY', 'UCL')
+SELECT * FROM research_project;
+--INSERTING DATA INTO THE CLIENT INVOICE TABLE 
+INSERT INTO client_invoice VALUES(70, 26588,'2020-10-10', 20)
+INSERT INTO client_invoice VALUES(72, 24588,'2020-11-11', 21)
+INSERT INTO client_invoice VALUES(73, 35588,'2020-12-12', 22)
+INSERT INTO client_invoice VALUES(74, 67588,'2021-12-12', 23)
+INSERT INTO client_invoice VALUES(75, 87588,'2020-08-10', 24)
+INSERT INTO client_invoice VALUES(76, 69588,'2020-07-10', 25)
+INSERT INTO client_invoice VALUES(77, 26588,'2020-06-10', 26)
+INSERT INTO client_invoice VALUES(78, 26788,'2020-05-10', 27)
+INSERT INTO client_invoice VALUES(79, 26898,'2020-04-10', 28)
+INSERT INTO client_invoice VALUES(71, 26238,'2020-03-10', 29)
+SELECT * FROM client_invoice;
+
+--INSERTING DATA INTO VEHICLE TABLE
+INSERT INTO vehicle VALUES(80, 'P98YH', 'TOYATA', 'PRIURES')
+INSERT INTO vehicle VALUES(81, 'P98YH', 'MAZDA', 'CX7')
+INSERT INTO vehicle VALUES(82, 'H89YH', 'VAN', 'PRIURES')
+INSERT INTO vehicle VALUES(83, 'S08YH', 'TOYATA', 'PRIURES')
+INSERT INTO vehicle VALUES(84, 'H78YH', 'GMC', 'XY6')
+INSERT INTO vehicle VALUES(85, 'AILYH', 'TOYATA', 'PRIURES')
+INSERT INTO vehicle VALUES(86, 'Q34YH', 'HYUNDAI', 'HCD56')
+INSERT INTO vehicle VALUES(87, 'D56YH', 'TOYATA', 'PRIURES')
+INSERT INTO vehicle VALUES(88, 'R568YH', 'RIO', 'MINI VAN')
+INSERT INTO vehicle VALUES(89, 'O90YH', 'TOYATA', 'PRIURES')
+SELECT * FROM vehicle;
+
+--INSERTING DATA INTO VEHICLE CONTRACT TABLE 
+INSERT INTO vehicle_contract VALUES(90,80, 'OWNED')
+INSERT INTO vehicle_contract VALUES(91,81, 'LEASED')
+INSERT INTO vehicle_contract VALUES(92,82, 'OWNED')
+INSERT INTO vehicle_contract VALUES(93,83, 'LEASED')
+INSERT INTO vehicle_contract VALUES(94,84, 'LEASED')
+INSERT INTO vehicle_contract VALUES(95,85, 'LEASED')
+INSERT INTO vehicle_contract VALUES(96,86, 'OWNED')
+INSERT INTO vehicle_contract VALUES(97,87, 'LEASED')
+INSERT INTO vehicle_contract VALUES(98,88, 'OWNED')
+INSERT INTO vehicle_contract VALUES(99,89, 'LEASED')
+
+SELECT * FROM vehicle_contract;
+
+--INSERTING DATA INTO THE ENERGY SURPLUS TABLE
+INSERT INTO energy_surplus VALUES(100,20, 110, 70)
+INSERT INTO energy_surplus VALUES(101,66, 111, 71)
+INSERT INTO energy_surplus VALUES(102,9, 112, 72)
+INSERT INTO energy_surplus VALUES(103,45, 113, 73)
+INSERT INTO energy_surplus VALUES(104,77, 114, 74)
+INSERT INTO energy_surplus VALUES(105,65, 115, 75)
+INSERT INTO energy_surplus VALUES(106,33, 116, 76)
+INSERT INTO energy_surplus VALUES(107,54, 117, 77)
+INSERT INTO energy_surplus VALUES(108,46, 118, 78)
+INSERT INTO energy_surplus VALUES(109,87, 119, 79)
+SELECT * FROM energy_surplus;
+
+--INSERTING DATA INTO THE ENERGY PRICE TABLE
+INSERT INTO energy_price VALUES(111, '5KWH', '£5', '£10')
+INSERT INTO energy_price VALUES(112, '6KWH', '£6', '£20')
+INSERT INTO energy_price VALUES(113, '7KWH', '£7', '£30')
+INSERT INTO energy_price VALUES(114, '8KWH', '£8', '£40')
+INSERT INTO energy_price VALUES(115, '9KWH', '£9', '£50')
+INSERT INTO energy_price VALUES(116, '10KWH', '£10', '£60')
+INSERT INTO energy_price VALUES(117, '11WH', '£11', '£70')
+INSERT INTO energy_price VALUES(118, '12WH', '£12', '£80')
+INSERT INTO energy_price VALUES(119, '13WH', '£13', '£90')
+INSERT INTO energy_price VALUES(110, '14KWH', '£14', '£100')
+
+SELECT * FROM energy_price;
+
+--INSERTING VALUES INTO EMPLOYEE SALARY TABLE 
+INSERT INTO employee_salary VALUES(120, 'PROJECT MANAGER', 20000)
+INSERT INTO employee_salary VALUES(121, 'WAREHOUSE MANAGER', 30000)
+INSERT INTO employee_salary VALUES(122, 'PROJECT CORDINATOR', 40000)
+INSERT INTO employee_salary VALUES(123, 'CEO', 500000)
+INSERT INTO employee_salary VALUES(124, 'MARKETING MANAGER', 60000)
+INSERT INTO employee_salary VALUES(125, 'ENGINEER', 70000)
+INSERT INTO employee_salary VALUES(126, 'ELECTRTION', 80000)
+INSERT INTO employee_salary VALUES(127, 'WAREHOUSE WORKER', 90000)
+INSERT INTO employee_salary VALUES(128, 'ACCOUNTANT', 30000)
+INSERT INTO employee_salary VALUES(129, 'DRIVER', 20000)
+
+SELECT * FROM employee_salary;
+
+--INSERTING DATA INTO THE EMPLOYEE POSITION TABLE 
+INSERT INTO employee_position VALUES(130, 40, 120, 'ACOUNTANT', 'PERMANANT')
+INSERT INTO employee_position VALUES(131, 41, 121, 'MARKETING MANGER', 'PERMANANT')
+INSERT INTO employee_position VALUES(132, 42, 122, 'ACOUNTANT', 'TEMPORARY')
+INSERT INTO employee_position VALUES(133, 43, 123, 'WAREHOUSE WORKER', 'PERMANANT')
+INSERT INTO employee_position VALUES(134, 44, 124, 'ELECTRITION', 'PERMANANT')
+INSERT INTO employee_position VALUES(135, 45, 125, 'ENGINEER', 'PERMANANT')
+INSERT INTO employee_position VALUES(136, 46, 126, 'DRIVER', 'TEMPORARY')
+INSERT INTO employee_position VALUES(137, 47, 127, 'ACOUNTANT', 'PERMANANT')
+INSERT INTO employee_position VALUES(138, 48, 128, 'CEO', 'PERMANANT')
+INSERT INTO employee_position VALUES(139, 49, 129, 'WAREHOUSE MANAGER', 'PERMANANT')
+SELECT * FROM employee_position;
+
+--INSERTING VALUES INTO SUPPLIER TABLE 
+INSERT INTO supplier VALUES(140, 'BT', 0121345879, 'BT27@GMAIL.COM', '12 longwell green', 'W450LM','west midlands', 'COVENTRY','UK')
+INSERT INTO supplier VALUES(141, 'RG', 0127745879, 'RG@GMAIL.COM', '13 longwell green', 'W470LM','midlands', 'STAFFODSHIRE', 'UK')
+INSERT INTO supplier VALUES(142, 'LG', 0121398879, 'LG@GMAIL.COM', '14 longwell green', 'W497LM','west midlands', 'COVENTRY', 'UK')
+INSERT INTO supplier VALUES(143, 'LOT', 01216795879, 'LOT@GMAIL.COM', '15 longwell green', 'W490LM','NORTH ENGLAND' ,'BRADFORD','UK')
+INSERT INTO supplier VALUES(144, 'LG', 0121675879, 'LG@GMAIL.COM', '16 longwell green', 'W400LM','west midlands' 'COVENTRY', 'UK')
+INSERT INTO supplier VALUES(145, 'PYT', 0124645879, 'PYT@GMAIL.COM', '19 longwell green', 'K86450LM','GREATER LONDON', 'LONDON', 'UK')
+INSERT INTO supplier VALUES(146, 'RG', 01268945879, 'RG@HOMAIL.COM', '20 longwell green', 'Y7870LM','west YORKSHIRE' ,'YORKSHIRE', 'UK')
+INSERT INTO supplier VALUES(147, 'POT', 0185345879, 'POT@HOTMAIL.COM', '55 longwell green', 'K8990LM','west midlands', 'COVENTRY', 'UK')
+INSERT INTO supplier VALUES(148, 'TYA', 0127845879, 'TYA@HOTMAIL.COM', '89 longwell green', 'H8990LM','EAST LONDON' ,'LONDON','UK')
+INSERT INTO supplier VALUES(149, 'RFT', 01279345879, 'RFT@GMAIL.COM', '78 longwell green', 'J890LM','west midlands', 'COVENTRY','UK')
+SELECT * FROM supplier;
+
+INSERT INTO warehouse VALUES(150, 'BORRY','30 longwell green', 'W450LM','COVENTRY','UK')
+INSERT INTO warehouse VALUES(151, 'RAG','13 longwell green', 'W470LM', 'STAFFODSHIRE', 'UK')
+INSERT INTO warehouse VALUES(152, 'KLG','14 longwell green', 'W497LM','COVENTRY', 'UK')
+INSERT INTO warehouse VALUES(153, 'LPOT','15 HILLSIDE', 'W490LM' ,'BRADFORD','UK')
+INSERT INTO warehouse VALUES(154, 'LPG','16 HIGH ST', 'W400LM', 'COVENTRY', 'UK')
+INSERT INTO warehouse VALUES(155, 'PYYT', '19 POPLAR ST', 'K86450LM','LONDON', 'UK')
+INSERT INTO warehouse VALUES(156, 'RTG','20 BARKING', 'Y7870LM' ,'YORKSHIRE', 'UK')
+INSERT INTO warehouse VALUES(157, 'PTT', '55 CENTRAL STATION', 'K8990LM', 'COVENTRY', 'UK')
+INSERT INTO warehouse VALUES(158, 'TPA', '89 SANSBURY RD', 'H8990LM' ,'LONDON','UK')
+INSERT INTO warehouse VALUES(159, 'FFT', '78 NEWTOWN ST', 'J890LM', 'COVENTRY','UK')
+SELECT * FROM warehouse;
+
+--INSERTING VALUES INTO MANUFACTORY TABLE 
+INSERT INTO manufactory VALUES (170, 'SOLAR EQUIPMENT', 29038, 160, 'UK', 'W8YHK')
+INSERT INTO manufactory VALUES (171, 'ELECTRIC EQUIPMENT', 78038, 160, 'CHINA', 'K9YHK')
+INSERT INTO manufactory VALUES (172, 'LIGHT EQUIPMENT', 09038, 168,'BANGLADESH', 'B89HK')
+INSERT INTO manufactory VALUES (173, 'FIRE ALARM EQUIPMENT', 20788, 161,'UK', 'W8YHK')
+INSERT INTO manufactory VALUES (174, 'WIRES', 29038, 162,'UK', 'W8YHK')
+INSERT INTO manufactory VALUES (175, 'BATTERY EQUIPMENT', 7838, 163, 'JAPAN', 'W8YHK')
+INSERT INTO manufactory VALUES (176, 'TESTER EQUIPMENT', 89038, 164,'PAKISTAN', 'W8YHK')
+INSERT INTO manufactory VALUES (177, 'CARBON ALARM', 90838, 165, 'NIGERIA', 'W8YHK')
+INSERT INTO manufactory VALUES (178, 'RADIATOR EQUIPMENT', 68938, 166,'USA', 'W8YHK')
+INSERT INTO manufactory VALUES (179, 'SWITCH EQUIPMENT', 67838, 167, 'UK', 'W8YHK')
+SELECT * FROM manufactory;
+
+
+
+--INSERTING INTO PRODUCT PRICE TABLE
+INSERT INTO product_price VALUES(160, 'light bulb', 3)
+INSERT INTO product_price VALUES(161, 'light wire', 33)
+INSERT INTO product_price VALUES(162, 'solar panel', 30)
+INSERT INTO product_price VALUES(163, 'e45 wire', 90)
+INSERT INTO product_price VALUES(164, 'fire alarm', 63)
+INSERT INTO product_price VALUES(165, 'battery', 3)
+INSERT INTO product_price VALUES(167, 'solar wires', 250)
+INSERT INTO product_price VALUES(168, 'engineer kit',430)
+INSERT INTO product_price VALUES(169, 'wire 567', 98)
+INSERT INTO product_price VALUES(166, 'wire 667', 130)
+SELECT * FROM product_price;
+
+-- in this section i will be perfoming SQL queries
+
+
+-- 1.find the number employees the company has employed
+SELECT COUNT(employee_id) 
+FROM employee;
+
+-- 2.find out the number of employee that were born before the year 2000 and are Cosultants at the company 
+SELECT COUNT(employee_id) 
+FROM employee
+WHERE employee_birthdate < '2000-01-01' AND employee_position = 'Cosultant';
+
+
+--3.searching all the employees positions and ordering them by the salary of each position  
+SELECT * 
+FROM employee_salary
+ORDER BY salary_id;
+
+
+-- 4.finding the average retail price for the companies products 
+SELECT AVG(product_retail_price)
+FROM product_price;
+
+-- 5.fiding the sum amount the company earns from selling their products
+SELECT SUM(product_retail_price)
+FROM product_price;
+
+-- 6.searching a client by their date of birth 
+SELECT *
+FROM client
+WHERE date_birth LIKE '1990-08-20%';
+
+--7.Finding any client that are small bussinesses 
+SELECT *
+FROM client_type
+WHERE costumer_setting LIKE '%bussiness%';
+
+-- 8.searching client invoices and ordering by their dates they have been created.
+SELECT * FROM client_invoice 
+ORDER BY invoice_date ASC;
+
+
+-- 9.find out the diffrent clients the company serves 
+SELECT DISTINCT costumer_setting
+FROM client_type;
+
+--10.Find a list of the research projects and the cities they took place 
+SELECT project_name, project_university
+FROM research_project
+UNION
+SELECT project_location, project_university
+FROM research_project;
+
+--11.finding out how many London based universities has the company worked with 
+SELECT COUNT(project_university),project_location
+FROM research_project
+GROUP BY project_location;
+
+--12.searching the total number of warehouse the company owns 
+SELECT COUNT(warehouse_name), warehouse_city
+FROM warehouse
+GROUP BY warehouse_city;
+
+-- 13.finding out the sum amount of energy (Kwh) is returned into the national grid
+SELECT SUM(energy_amount)
+FROM energy_surplus;
+
+--14.Finding suppliers name by searching the last character of the supplier name
+SELECT *
+FROM supplier
+WHERE supplier_name LIKE '%T';
+
+--15.Find any of the company's manufactories that are based in the UK
+SELECT *
+FROM manufactory
+WHERE product_make LIKE '%UK';
+
+--16.Find alll the services and thier cost 
+SELECT service.service_id, service.service_selection, service_cost.hourly_cost
+FROM service
+CROSS JOIN service_cost;
+
+--17.Find the companies vehicles and their contracts 
+SELECT vehicle.vehicle_id, vehicle.vehicle_model, vehicle.plate_number, vehicle_contract.contract_type
+FROM vehicle
+CROSS JOIN vehicle_contract;
+
+--18.finding a client invoice information by joining three tables 
+SELECT client_invoice.invoice_id,client_invoice.invoice_number, client.client_id, client.first_name, client.last_name, client_type.costumer_setting
+FROM client, client_type
+CROSS JOIN client_invoice
+LIMIT 1;
+
+--19.searching a non existing client  
+SELECT client.date_birth, client.first_name
+FROM client
+WHERE EXISTS
+(SELECT date_birth FROM client WHERE client.date_birth = '1990-09-01%' AND client.first_name = '%alex%');
+
+--20.searching if the first name collumn exist in the client table 
+SELECT first_name 
+FROM client
+WHERE EXISTS
+(SELECT first_name FROM client)
+LIMIT 5;
+
+--21.the highest price of a product with a condition
+SELECT MAX(product_retail_price) AS HigestPrice
+FROM product_price
+WHERE product_retail_price > 60;
+
+
+-- 22.the lowest price of the products with a condition
+SELECT MIN(product_retail_price) AS Lowestprice
+FROM product_price
+WHERE product_retail_price < 50;
+
+-- 23.latest client invoice created 
+SELECT MIN(invoice_date)
+FROM client_invoice;
+
+-- 24.earliest client invoice created 
+SELECT Max(invoice_date)
+FROM client_invoice;
+
+--25.youngest employee in the company 
+SELECT MIN(employee_age)
+FROM employee;
+
+--26.oldest working employee in the company 
+SELECT MAX(employee_age)
+FROM employee;
+
+--27. Total amount the company spends on payroll 
+SELECT SUM(salary_annually)
+FROM employee_salary;
+-- 28.find all the roles and employee IDs of the employees who have earned over £20000 a year 
+SELECT employee_position.employee_id, employee_position.role
+FROM employee_position
+WHERE employee_position.salary_id IN (SELECT employee_salary.salary_id
+FROM employee_salary
+WHERE employee_salary.salary_annually >20000);
+
+--29.find all IDs of the services handled by employees who work in the HR department 
+SELECT service.service_id
+FROM service
+WHERE service.employee_id IN (SELECT employee.employee_id
+FROM employee
+WHERE employee.employee_department  = 'HR');
+
+
+--Question 5 (STU76627)
+--this code which is run on the terminal creates an insert trigger before a new client is added to the client table 
+-- the code sends stores a message in the new_client table 
+CREATE TABLE new_client(
+    message VARCHAR(200)
+);
+DELIMITER $$  
+CREATE 
+TRIGGER new_client BEFORE INSERT  
+ON client  
+FOR EACH ROW BEGIN  
+INSERT INTO new_client VALUES('a new client has been added to the powerhouse database'); 
+END$$ 
+DELIMITER; 
+
+--new client is inserted into the table
+INSERT INTO client VALUES(19, 'JIM', 'CARREY', '1967-08-01', 55, '66 longwell green',0121346679, 'east midlands','W987LM', 'COVENTRY') 
+
+--results
+SELECT * FROM new_client;
+
+--THIS trigger will be excuted when an update is performed on the client sending the message passed on
+CREATE TRIGGER tr_up_client
+BEFORE UPDATE ON client
+FOR EACH ROW 
+INSERT INTO new_client VALUES('Updates have been performed on the client table');
+
+--this trigger would be excuted when the client table is deleted 
+CREATE TRIGGER tr_del_client
+BEFORE DELETE ON client
+FOR EACH ROW 
+INSERT INTO new_client VALUES('the client table has been deleted');
+
+-- THIS TRIGGER WILL TURN  NEW CLEINTS FIRST NAME INTO UPPERCASE  
+CREATE TRIGGER tr_ins_client 
+BEFORE INSERT ON client
+FOR EACH ROW
+SET NEW.first_name = UPPER(NEW.first_name);
+SHOW TRIGGERS;
+
+
+
+-- Creating Indexes on client invoice table
+
+-- this index is used to join the client invoice table to the client table
+
+CREATE INDEX IX_clientinvoice
+ON client_invoice(client_id);
+
+
+--to Delete the index the following code can be excuted 
+DROP INDEX IX_clientinvoice
+ON client_invoice;
+
+--creating combined index on the client invoice table 
+CREATE INDEX IX_InvoiceDetails
+ON client_invoice(invoice_number, invoice_date);
+
+--creating a UNIQUE index where values are not permitted to be duplicated 
+CREATE UNIQUE INDEX IX_InvoiceNo
+ON client_invoice (invoice_number);
+SHOW INDEXES FROM client_invoice;
+
+--Procedures 
+
+--This stored procedure would allow service costs to be accesed and code to be reused
+CREATE PROCEDURE All_Cost()
+BEGIN
+  SELECT * FROM service_cost;
+END
+
+CALL All_Cost;
+
+--This code would create a stored procedure that would access all companies research projects 
+CREATE PROCEDURE All_researchprojects()
+BEGIN
+  SELECT * FROM research_project;
+END
+
+CALL All_researchprojects();
+
+SHOW PROCEDURE STATUS;
